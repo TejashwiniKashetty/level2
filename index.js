@@ -1,35 +1,49 @@
-const http = require("http");
-const fs = require("fs");
+const http = require('http')
+const fs= require("fs");
+//const { response } = require('express');
 
-let homeContent = "";
-let projectContent = "";
-
-fs.readFile("home.html", (err, home) => {
-  if (err) {
+fs.readFile("home.html",
+(err,home) => {
+if(err){
     throw err;
-  }
-  homeContent = home;
+}
+homecontent=home;
 });
 
-fs.readFile("project.html", (err, project) => {
-  if (err) {
-    throw err;
-  }
-  projectContent = project;
-});
-http
-  .createServer((request, response) => {
-    let url = request.url;
-    response.writeHeader(200, { "Content-Type": "text/html" });
-    switch (url) {
-      case "/project":
-        response.write(projectContent);
-        response.end();
-        break;
-      default:
-        response.write(homeContent);
-        response.end();
-        break;
+fs.readFile("project.html",
+(err,fil) => {
+    if(err)
+    {
+        throw err;
     }
-  })
-  .listen(5000);
+    filecontent=fil;
+})
+
+fs.readFile("registration.html",
+(err,regf) => {
+    if(err)
+    {
+        throw err;
+    }
+    reg=regf;
+})
+let args=require("minimist")(process.argv.slice(2));
+http.createServer((request,response) =>{
+    let url =request.url
+    response.writeHeader(200,{"Content-type":"text/html"})
+    switch (url)
+    {
+        case "/project":
+            response.write(filecontent)
+            response.end();
+            break
+        case "/registration":
+            response.write(reg)
+            response.end();
+            break;
+        default:
+            response.write(homecontent)
+            response.end();
+            break;
+    }
+}).listen(args["port"]);
